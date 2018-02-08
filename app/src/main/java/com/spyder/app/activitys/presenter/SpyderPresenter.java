@@ -3,13 +3,19 @@ package com.spyder.app.activitys.presenter;
 import android.content.Context;
 import android.widget.Toast;
 
+import com.spyder.app.activitys.request.CallHistoryDetails;
+import com.spyder.app.activitys.request.LocationDetail;
+import com.spyder.app.activitys.request.LocationDetails;
 import com.spyder.app.activitys.request.UserDetails;
+import com.spyder.app.activitys.request.UserId;
 import com.spyder.app.activitys.response.BaseContext;
+import com.spyder.app.activitys.response.GetCallHistoryResponce;
 import com.spyder.app.activitys.util.MyLog;
 import com.spyder.app.activitys.webservices.Mediator;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -28,7 +34,22 @@ public class SpyderPresenter implements SpyderContract.Presenter {
     @Override
     public void saveUserDetails(UserDetails details) {
         Call<BaseContext> call = mediator.saveUserDetails(details);
-        call.enqueue(loginCallBack);
+        call.enqueue(userCallBack);
+    }
+    @Override
+    public void saveLocationDetails(LocationDetails locationDetails) {
+        Call<BaseContext> call = mediator.saveLocationDetails(locationDetails);
+        call.enqueue(locationCallBack);
+    }
+    @Override
+    public void savecallHistoryDetails(CallHistoryDetails callHistoryDetails) {
+        Call<BaseContext> call = mediator.savecallHistoryDetails(callHistoryDetails);
+        call.enqueue(callHistoryCallBack);
+    }
+    @Override
+    public void getCallHistoryDetails(UserId userId) {
+        Call<GetCallHistoryResponce> call = mediator.getCallHistoryDetails(userId);
+        call.enqueue(getCallHistoryDetailsCallBack);
     }
 
     private void handleFailure(Throwable t) {
@@ -36,7 +57,7 @@ public class SpyderPresenter implements SpyderContract.Presenter {
         mView.failureResponse(t.getMessage());
     }
 
-    private Callback<BaseContext> loginCallBack = new Callback<BaseContext>() {
+    private Callback<BaseContext> userCallBack = new Callback<BaseContext>() {
         @Override
         public void onResponse(Response<BaseContext> response) {
             MyLog.log(TAG, response.body().toString() + "");
@@ -54,7 +75,64 @@ public class SpyderPresenter implements SpyderContract.Presenter {
             handleFailure(t);
         }
     };
+    private Callback<BaseContext> locationCallBack = new Callback<BaseContext>() {
+        @Override
+        public void onResponse(Response<BaseContext> response) {
+            MyLog.log(TAG, response.body().toString() + "");
+            MyLog.log("locationCallback Responce",response.body().toString()+"");
+            if (response.isSuccess()) {
+                MyLog.log("locationCallback Responce Success",response.body().toString()+"");
+                mView.successResponse(response.body());
+                MyLog.log(TAG, response.body().toString() + ""+response.raw());
+                MyLog.log("locationCallback Responce mView",response.body().toString()+"");
+            } else {
+                handleError(response);
+            }
+        }
 
+        @Override
+        public void onFailure(Throwable t) {
+            handleFailure(t);
+        }
+    };
+    private Callback<BaseContext> callHistoryCallBack = new Callback<BaseContext>() {
+        @Override
+        public void onResponse(Response<BaseContext> response) {
+            MyLog.log(TAG, response.body().toString() + "");
+            MyLog.log("locationCallback Responce",response.body().toString()+"");
+            if (response.isSuccess()) {
+                MyLog.log("locationCallback Responce Success",response.body().toString()+"");
+                mView.successResponse(response.body());
+                MyLog.log(TAG, response.body().toString() + ""+response.raw());
+                MyLog.log("locationCallback Responce mView",response.body().toString()+"");
+            } else {
+                handleError(response);
+            }
+        }
+
+        @Override
+        public void onFailure(Throwable t) {
+            handleFailure(t);
+        }
+    };
+    private Callback<GetCallHistoryResponce> getCallHistoryDetailsCallBack = new Callback<GetCallHistoryResponce>() {
+        @Override
+        public void onResponse(Response<GetCallHistoryResponce> response) {
+//            MyLog.log(TAG, response.body().toString() + "");
+            if (response.isSuccess()) {
+
+               // mView.successResponse(response.body());
+                MyLog.log(TAG, response.body().toString() + ""+response.raw());
+            } else {
+                handleError(response);
+            }
+        }
+
+        @Override
+        public void onFailure(Throwable t) {
+            handleFailure(t);
+        }
+    };
     private void handleError(Response response) {
         String error = "";
 
@@ -78,4 +156,7 @@ public class SpyderPresenter implements SpyderContract.Presenter {
         }
         mView.failureResponse(error);
     }
+
+
+
 }

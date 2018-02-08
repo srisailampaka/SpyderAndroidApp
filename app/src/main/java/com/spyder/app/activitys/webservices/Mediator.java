@@ -2,12 +2,17 @@ package com.spyder.app.activitys.webservices;
 
 import android.content.Context;
 
+import com.spyder.app.activitys.request.CallHistoryDetails;
+import com.spyder.app.activitys.request.LocationDetails;
 import com.spyder.app.activitys.request.UserDetails;
+import com.spyder.app.activitys.request.UserId;
 import com.spyder.app.activitys.response.BaseContext;
+import com.spyder.app.activitys.response.GetCallHistoryResponce;
 import com.spyder.app.activitys.util.Constants;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Cache;
@@ -28,7 +33,7 @@ public class Mediator {
 
     private static final String TAG = Mediator.class.getSimpleName();
     private static Mediator mediator;
-    private ServiceProxy mLoginServiceProxy;
+    private ServiceProxy mServiceProxy;
     private String AUTH_PREFIX = "bearer ";
     private String token;
     private Context _context;
@@ -40,7 +45,7 @@ public class Mediator {
                 .baseUrl(Constants.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        mLoginServiceProxy = loginRetrofit.create(ServiceProxy.class);
+        mServiceProxy = loginRetrofit.create(ServiceProxy.class);
     }
 
     public static synchronized Mediator getInstance(Context context) {
@@ -51,7 +56,16 @@ public class Mediator {
     }
 
     public Call<BaseContext> saveUserDetails(UserDetails details) {
-        return mLoginServiceProxy.saveUserDetails(details);
+        return mServiceProxy.saveUserDetails(details);
+    }
+    public Call<BaseContext> saveLocationDetails(LocationDetails locationDetails) {
+        return mServiceProxy.saveLocationDetails(locationDetails);
+    }
+    public Call<BaseContext> savecallHistoryDetails(CallHistoryDetails callHistoryDetails) {
+        return mServiceProxy.savecallHistoryDetails(callHistoryDetails);
+    }
+    public Call<GetCallHistoryResponce> getCallHistoryDetails(UserId userId) {
+        return mServiceProxy.getCallHistoryDetails(userId);
     }
 
 //    public void CreateProxyWithToken() {
