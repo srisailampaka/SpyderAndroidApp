@@ -5,6 +5,7 @@ import com.spyder.app.activitys.request.CallHistoryDetails;
 import com.spyder.app.activitys.request.LocationDetails;
 import com.spyder.app.activitys.request.UserDetails;
 import com.spyder.app.activitys.request.UserId;
+import com.spyder.app.activitys.request.UserPhotoDetailList;
 import com.spyder.app.activitys.response.BaseContext;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public interface SpyderContract {
         void saveLocationDetails(LocationDetails locationDetails);
         void savecallHistoryDetails(CallHistoryDetails callHistoryDetails);
         void getCallHistoryDetails(UserId userId);
+        void savePhotoDetails(UserPhotoDetailList userPhotoDetailList);
     }
 
 }

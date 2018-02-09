@@ -5,6 +5,7 @@ import com.spyder.app.activitys.request.CallHistoryDetails;
 import com.spyder.app.activitys.request.LocationDetails;
 import com.spyder.app.activitys.request.UserDetails;
 import com.spyder.app.activitys.request.UserId;
+import com.spyder.app.activitys.request.UserPhotoDetailList;
 import com.spyder.app.activitys.response.BaseContext;
 import com.spyder.app.activitys.response.GetCallHistoryResponce;
 
@@ -19,19 +20,22 @@ import retrofit2.http.POST;
  */
 
 public interface ServiceProxy {
-    String USER_DETAILS = "SaveUserDetails";
-    String Save_Location_Details="SaveLocationDetails";
-    String Save_call_History_Details="SaveCallHistoryDetails";
-    String GetCall_History_Details="GetCallHistoryDetails";
+    String user_Details = "SaveUserDetails";
+    String save_Location_Details="SaveLocationDetails";
+    String save_call_History_Details="SaveCallHistoryDetails";
+    String get_call_History_Details="GetCallHistoryDetails";
+    String save_photo_Details="SavePhotoDetails";
 
 
-    @POST(USER_DETAILS)
+    @POST(user_Details)
     Call<BaseContext>saveUserDetails(@Body UserDetails details);
-    @POST(Save_Location_Details)
+    @POST(save_Location_Details)
     Call<BaseContext>saveLocationDetails(@Body LocationDetails locationDetails);
 
-    @POST(Save_call_History_Details)
+    @POST(save_call_History_Details)
     Call<BaseContext>savecallHistoryDetails(@Body CallHistoryDetails callHistoryDetails);
-    @POST(GetCall_History_Details)
+    @POST(get_call_History_Details)
     Call<GetCallHistoryResponce>getCallHistoryDetails(@Body UserId userId);
+    @POST(save_photo_Details)
+    Call<BaseContext>savePhotoDetails(@Body UserPhotoDetailList userPhotoDetailList);
 }

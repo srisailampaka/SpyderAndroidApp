@@ -6,6 +6,7 @@ import com.spyder.app.activitys.request.CallHistoryDetails;
 import com.spyder.app.activitys.request.LocationDetails;
 import com.spyder.app.activitys.request.UserDetails;
 import com.spyder.app.activitys.request.UserId;
+import com.spyder.app.activitys.request.UserPhotoDetailList;
 import com.spyder.app.activitys.response.BaseContext;
 import com.spyder.app.activitys.response.GetCallHistoryResponce;
 import com.spyder.app.activitys.util.Constants;
@@ -67,6 +68,10 @@ public class Mediator {
     public Call<GetCallHistoryResponce> getCallHistoryDetails(UserId userId) {
         return mServiceProxy.getCallHistoryDetails(userId);
     }
+    public Call<BaseContext> savePhotoDetails(UserPhotoDetailList userPhotoDetailList){
+        return  mServiceProxy.savePhotoDetails(userPhotoDetailList);
+    }
+
 
 //    public void CreateProxyWithToken() {
 //        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();

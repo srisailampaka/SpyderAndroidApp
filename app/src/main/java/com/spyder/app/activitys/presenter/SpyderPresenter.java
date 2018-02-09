@@ -8,6 +8,7 @@ import com.spyder.app.activitys.request.LocationDetail;
 import com.spyder.app.activitys.request.LocationDetails;
 import com.spyder.app.activitys.request.UserDetails;
 import com.spyder.app.activitys.request.UserId;
+import com.spyder.app.activitys.request.UserPhotoDetailList;
 import com.spyder.app.activitys.response.BaseContext;
 import com.spyder.app.activitys.response.GetCallHistoryResponce;
 import com.spyder.app.activitys.util.MyLog;
@@ -50,6 +51,11 @@ public class SpyderPresenter implements SpyderContract.Presenter {
     public void getCallHistoryDetails(UserId userId) {
         Call<GetCallHistoryResponce> call = mediator.getCallHistoryDetails(userId);
         call.enqueue(getCallHistoryDetailsCallBack);
+    }
+    @Override
+    public void savePhotoDetails(UserPhotoDetailList userPhotoDetailList){
+        Call<BaseContext> call=mediator.savePhotoDetails(userPhotoDetailList);
+        call.enqueue(savePhotoDetailsCallBack);
     }
 
     private void handleFailure(Throwable t) {
@@ -123,6 +129,26 @@ public class SpyderPresenter implements SpyderContract.Presenter {
 
                // mView.successResponse(response.body());
                 MyLog.log(TAG, response.body().toString() + ""+response.raw());
+            } else {
+                handleError(response);
+            }
+        }
+
+        @Override
+        public void onFailure(Throwable t) {
+            handleFailure(t);
+        }
+    };
+    private Callback<BaseContext> savePhotoDetailsCallBack = new Callback<BaseContext>() {
+        @Override
+        public void onResponse(Response<BaseContext> response) {
+            MyLog.log(TAG, response.body().toString() + "");
+            MyLog.log("photoDetails Responce",response.body().toString()+"");
+            if (response.isSuccess()) {
+                MyLog.log("photoDetails Responce Success",response.body().toString()+"");
+                mView.successResponse(response.body());
+                MyLog.log(TAG, response.body().toString() + ""+response.raw());
+                MyLog.log("photoDetails Responce mView",response.body().toString()+"");
             } else {
                 handleError(response);
             }
