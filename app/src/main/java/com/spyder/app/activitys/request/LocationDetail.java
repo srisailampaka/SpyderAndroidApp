@@ -32,7 +32,7 @@ public class LocationDetail {
      * @param lattitude
      * @param longitude
      */
-    public LocationDetail(String userId, String timestamp, String lattitude, String longitude) {
+    public LocationDetail(String userId, String lattitude,String longitude,String timestamp) {
         super();
         this.userId = userId;
         this.timestamp = timestamp;
