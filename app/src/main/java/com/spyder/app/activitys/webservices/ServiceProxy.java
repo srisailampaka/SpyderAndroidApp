@@ -28,7 +28,7 @@ public interface ServiceProxy {
 
 
     @POST(user_Details)
-    Call<BaseContext>saveUserDetails(@Body UserDetails details);
+    Call<UserDetails>saveUserDetails(@Body UserDetails details);
     @POST(save_Location_Details)
     Call<BaseContext>saveLocationDetails(@Body LocationDetails locationDetails);
 

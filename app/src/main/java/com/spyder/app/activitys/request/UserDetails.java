@@ -1,6 +1,8 @@
 package com.spyder.app.activitys.request;
 
-public class UserDetails {
+import com.spyder.app.activitys.response.BaseContext;
+
+public class UserDetails extends BaseContext{
 
     private UserDetails_ userDetails;
 

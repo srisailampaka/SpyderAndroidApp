@@ -56,7 +56,7 @@ public class Mediator {
         return mediator;
     }
 
-    public Call<BaseContext> saveUserDetails(UserDetails details) {
+    public Call<UserDetails> saveUserDetails(UserDetails details) {
         return mServiceProxy.saveUserDetails(details);
     }
     public Call<BaseContext> saveLocationDetails(LocationDetails locationDetails) {

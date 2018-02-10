@@ -34,7 +34,7 @@ public class SpyderPresenter implements SpyderContract.Presenter {
     }
     @Override
     public void saveUserDetails(UserDetails details) {
-        Call<BaseContext> call = mediator.saveUserDetails(details);
+        Call<UserDetails> call = mediator.saveUserDetails(details);
         call.enqueue(userCallBack);
     }
     @Override
@@ -63,9 +63,9 @@ public class SpyderPresenter implements SpyderContract.Presenter {
         mView.failureResponse(t.getMessage());
     }
 
-    private Callback<BaseContext> userCallBack = new Callback<BaseContext>() {
+    private Callback<UserDetails> userCallBack = new Callback<UserDetails>() {
         @Override
-        public void onResponse(Response<BaseContext> response) {
+        public void onResponse(Response<UserDetails> response) {
             MyLog.log(TAG, response.body().toString() + "");
             if (response.isSuccess()) {
 

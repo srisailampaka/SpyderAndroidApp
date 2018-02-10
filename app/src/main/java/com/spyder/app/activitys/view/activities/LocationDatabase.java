@@ -96,22 +96,23 @@ public class LocationDatabase extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
-
+if(cursor.getCount()>0)
         // looping through all rows and adding to list
-        if (cursor.moveToFirst()) {
-            do {
-                LocationDetail locationDetail = new LocationDetail();
-                locationDetail.setUserId(String.valueOf(Integer.parseInt(cursor.getString(1))));
-                locationDetail.setLattitude(cursor.getString(2));
-                locationDetail.setLongitude(cursor.getString(3));
-                locationDetail.setTimestamp(cursor.getString(4));
+{
+    if (cursor.moveToFirst()) {
+        do {
+            LocationDetail locationDetail = new LocationDetail();
+            locationDetail.setUserId(String.valueOf(Integer.parseInt(cursor.getString(1))));
+            locationDetail.setLattitude(cursor.getString(2));
+            locationDetail.setLongitude(cursor.getString(3));
+            locationDetail.setTimestamp(cursor.getString(4));
 
 
-                // Adding contact to list
-                locationDataList.add(locationDetail);
-            } while (cursor.moveToNext());
-        }
-
+            // Adding contact to list
+            locationDataList.add(locationDetail);
+        } while (cursor.moveToNext());
+    }
+}
         // return contact list
         return locationDataList;
     }

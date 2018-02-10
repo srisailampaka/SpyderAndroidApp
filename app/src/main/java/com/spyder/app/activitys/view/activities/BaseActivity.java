@@ -9,7 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.animation.RotateAnimation;
 
-import com.spyder.app.R;
+import com.spyder.app.activitys.R;
 import com.spyder.app.activitys.presenter.SpyderContract;
 import com.spyder.app.activitys.presenter.SpyderPresenter;
 

@@ -14,6 +14,8 @@ import android.provider.Settings;
 
 import com.spyder.app.activitys.util.MyLog;
 
+import okhttp3.internal.Util;
+
 public class GPSTrack extends Service implements LocationListener{
 	private static final String TAG = GPSTrack.class.getSimpleName();
 	 private final Context mContext;
@@ -43,6 +45,7 @@ public class GPSTrack extends Service implements LocationListener{
 
 	    public GPSTrack(Context context) {
 	        this.mContext = context;
+
 	        getLocation();
 	    }
 
