@@ -20,14 +20,17 @@ import java.util.List;
  */
 
 public class GetDetailsInformation {
-private Context context;
+    private Context context;
+    private SharedPref sharedPref;
     public GetDetailsInformation(Context applicationContext) {
-       context= applicationContext;
+        context = applicationContext;
+        sharedPref = new SharedPref(context);
     }
 
     public List<CallHistoryDetailsPojo> getCallHistory() {
-         List<CallHistoryDetailsPojo> saveCallHistoryDetailsList=new ArrayList<>();
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED) {
+        List<CallHistoryDetailsPojo> saveCallHistoryDetailsList = new ArrayList<>();
+
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALL_LOG) == PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -35,8 +38,7 @@ private Context context;
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
-            return saveCallHistoryDetailsList;
-        }
+
         Cursor mCursor = context.getApplicationContext().getContentResolver().query(CallLog.Calls.CONTENT_URI, null, null,
                 null, null);
         int number = mCursor.getColumnIndex(CallLog.Calls.NUMBER);
@@ -63,6 +65,7 @@ private Context context;
                     break;
             }
             CallHistoryDetailsPojo callhistory=new CallHistoryDetailsPojo();
+            callhistory.setPhoneNumber(sharedPref.getUserId());
             callhistory.setPhoneNumber(phnumber);
             callhistory.setDuration(callduration);
             callhistory.setTypeOfCall(callTypeStr);
@@ -71,9 +74,10 @@ private Context context;
         }
         MyLog.log("calldata......",sb.toString());
         // textview.setText(sb.toString());
-        return saveCallHistoryDetailsList;
+
 
     }
+        return saveCallHistoryDetailsList;}
     public  void getBrowserHistory(){
         Browser browser=new Browser();
         Cursor mCur = context.getApplicationContext().getContentResolver().query(browser.BOOKMARKS_URI, browser.HISTORY_PROJECTION, null, null, null);

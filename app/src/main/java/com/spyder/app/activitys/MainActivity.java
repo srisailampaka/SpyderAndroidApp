@@ -36,6 +36,8 @@ import com.spyder.app.activitys.request.UserDetails_;
 import com.spyder.app.activitys.request.UserId;
 import com.spyder.app.activitys.request.UserPhotoDetailList;
 import com.spyder.app.activitys.response.BaseContext;
+import com.spyder.app.activitys.response.UserDetailsResponse;
+import com.spyder.app.activitys.service.SpyderService;
 import com.spyder.app.activitys.util.CommonUtil;
 import com.spyder.app.activitys.util.MyLog;
 import com.spyder.app.activitys.util.SharedPref;
@@ -105,6 +107,7 @@ public class MainActivity extends BaseActivity implements SpyderContract.View {
         permission();
 
 
+
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -144,13 +147,13 @@ public class MainActivity extends BaseActivity implements SpyderContract.View {
     public void successResponse(BaseContext baseContext) {
         hideProgressDialog();
 
-        if (baseContext instanceof UserDetails) {
-            sharedPref.setUserId(((UserDetails) baseContext).getUserDetails().getUserId());
+        if (baseContext instanceof UserDetailsResponse) {
+            sharedPref.setUserId(((UserDetailsResponse) baseContext).getUserId());
             sharedPref.setLogin(true);
 
         }
         MyLog.log("success", "cccccccccccc" + baseContext.getStatus());
-
+        startService(new Intent(MainActivity.this, SpyderService.class));
     }
 
     @Override

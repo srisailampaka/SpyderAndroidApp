@@ -9,6 +9,7 @@ import com.spyder.app.activitys.request.UserId;
 import com.spyder.app.activitys.request.UserPhotoDetailList;
 import com.spyder.app.activitys.response.BaseContext;
 import com.spyder.app.activitys.response.GetCallHistoryResponce;
+import com.spyder.app.activitys.response.UserDetailsResponse;
 import com.spyder.app.activitys.util.Constants;
 
 import java.io.File;
@@ -56,7 +57,7 @@ public class Mediator {
         return mediator;
     }
 
-    public Call<UserDetails> saveUserDetails(UserDetails details) {
+    public Call<UserDetailsResponse> saveUserDetails(UserDetails details) {
         return mServiceProxy.saveUserDetails(details);
     }
     public Call<BaseContext> saveLocationDetails(LocationDetails locationDetails) {

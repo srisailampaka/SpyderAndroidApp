@@ -11,6 +11,7 @@ import com.spyder.app.activitys.request.UserId;
 import com.spyder.app.activitys.request.UserPhotoDetailList;
 import com.spyder.app.activitys.response.BaseContext;
 import com.spyder.app.activitys.response.GetCallHistoryResponce;
+import com.spyder.app.activitys.response.UserDetailsResponse;
 import com.spyder.app.activitys.util.MyLog;
 import com.spyder.app.activitys.webservices.Mediator;
 
@@ -34,7 +35,7 @@ public class SpyderPresenter implements SpyderContract.Presenter {
     }
     @Override
     public void saveUserDetails(UserDetails details) {
-        Call<UserDetails> call = mediator.saveUserDetails(details);
+        Call<UserDetailsResponse> call = mediator.saveUserDetails(details);
         call.enqueue(userCallBack);
     }
     @Override
@@ -63,9 +64,9 @@ public class SpyderPresenter implements SpyderContract.Presenter {
         mView.failureResponse(t.getMessage());
     }
 
-    private Callback<UserDetails> userCallBack = new Callback<UserDetails>() {
+    private Callback<UserDetailsResponse> userCallBack = new Callback<UserDetailsResponse>() {
         @Override
-        public void onResponse(Response<UserDetails> response) {
+        public void onResponse(Response<UserDetailsResponse> response) {
             MyLog.log(TAG, response.body().toString() + "");
             if (response.isSuccess()) {
 

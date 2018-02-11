@@ -8,6 +8,7 @@ import com.spyder.app.activitys.request.UserId;
 import com.spyder.app.activitys.request.UserPhotoDetailList;
 import com.spyder.app.activitys.response.BaseContext;
 import com.spyder.app.activitys.response.GetCallHistoryResponce;
+import com.spyder.app.activitys.response.UserDetailsResponse;
 
 import java.util.List;
 
@@ -28,7 +29,7 @@ public interface ServiceProxy {
 
 
     @POST(user_Details)
-    Call<UserDetails>saveUserDetails(@Body UserDetails details);
+    Call<UserDetailsResponse>saveUserDetails(@Body UserDetails details);
     @POST(save_Location_Details)
     Call<BaseContext>saveLocationDetails(@Body LocationDetails locationDetails);
 

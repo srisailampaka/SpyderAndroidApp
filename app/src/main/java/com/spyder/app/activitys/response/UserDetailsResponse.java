@@ -1,29 +1,30 @@
-package com.spyder.app.activitys.request;
+package com.spyder.app.activitys.response;
 
 /**
- * Created by VenkatPc on 2/6/2018.
+ * Created by srisailampaka on 11/02/18.
  */
 
-public class UserDetails_ {
+public class UserDetailsResponse extends BaseContext {
     private String username;
     private String deviceid;
-
+    private String userId;
 
     /**
      * No args constructor for use in serialization
      */
-    public UserDetails_() {
+    public UserDetailsResponse() {
     }
 
     /**
      * @param username
+     * @param userId
      * @param deviceid
      */
-    public UserDetails_(String username, String deviceid) {
+    public UserDetailsResponse(String username, String deviceid, String userId) {
         super();
         this.username = username;
         this.deviceid = deviceid;
-
+        this.userId = userId;
     }
 
     public String getUsername() {
@@ -42,6 +43,12 @@ public class UserDetails_ {
         this.deviceid = deviceid;
     }
 
+    public String getUserId() {
+        return userId;
+    }
 
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
 }
