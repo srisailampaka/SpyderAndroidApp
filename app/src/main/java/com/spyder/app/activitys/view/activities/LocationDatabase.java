@@ -43,7 +43,7 @@ public class LocationDatabase extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_CONTACTS_TABLE = "CREATE TABLE " + TABLE_LOCATION_DATA + "(" + KEY_Id + " INTEGER PRIMARY KEY,"
-                + User_Id + " INTEGER," + User_Lattitude + " TEXT,"+User_Langitude + " TEXT,"
+                + User_Id + " INTEGER," + User_Lattitude + " TEXT," + User_Langitude + " TEXT,"
                 + User_TimeStamp + " TEXT" + ")";
         db.execSQL(CREATE_CONTACTS_TABLE);
     }
@@ -57,12 +57,13 @@ public class LocationDatabase extends SQLiteOpenHelper {
         // Create tables again
         onCreate(db);
     }
+
     // Adding new contact
     public void addLocationDetails(LocationDetail locationDetail) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(User_Id,locationDetail.getUserId());
+        values.put(User_Id, locationDetail.getUserId());
         values.put(User_Lattitude, locationDetail.getLattitude());
         values.put(User_Langitude, locationDetail.getLongitude());
         values.put(User_TimeStamp, locationDetail.getTimestamp());
@@ -72,18 +73,19 @@ public class LocationDatabase extends SQLiteOpenHelper {
         db.insert(TABLE_LOCATION_DATA, null, values);
         db.close(); // Closing database connection
     }
+
     // Getting single Location
     public LocationDetail getLocation(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query(TABLE_LOCATION_DATA, new String[] { User_Id,
-                        User_Lattitude, User_Langitude,User_TimeStamp }, User_Id + "=?",
-                new String[] { String.valueOf(id) }, null, null, null, null);
+        Cursor cursor = db.query(TABLE_LOCATION_DATA, new String[]{User_Id,
+                        User_Lattitude, User_Langitude, User_TimeStamp}, User_Id + "=?",
+                new String[]{String.valueOf(id)}, null, null, null, null);
         if (cursor != null)
             cursor.moveToFirst();
 
         LocationDetail locationDetail = new LocationDetail(String.valueOf(Integer.parseInt(cursor.getString(0))),
-                cursor.getString(1), cursor.getString(2),cursor.getString(3));
+                cursor.getString(1), cursor.getString(2), cursor.getString(3));
         // return contact
         return locationDetail;
     }
@@ -96,24 +98,30 @@ public class LocationDatabase extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
-if(cursor.getCount()>0)
+        if (cursor.getCount() > 0)
         // looping through all rows and adding to list
-{
-    if (cursor.moveToFirst()) {
-        do {
-            LocationDetail locationDetail = new LocationDetail();
-            locationDetail.setUserId(String.valueOf(Integer.parseInt(cursor.getString(1))));
-            locationDetail.setLattitude(cursor.getString(2));
-            locationDetail.setLongitude(cursor.getString(3));
-            locationDetail.setTimestamp(cursor.getString(4));
+        {
+            if (cursor.moveToFirst()) {
+                do {
+                    LocationDetail locationDetail = new LocationDetail();
+                    locationDetail.setUserId(String.valueOf(Integer.parseInt(cursor.getString(1))));
+                    locationDetail.setLattitude(cursor.getString(2));
+                    locationDetail.setLongitude(cursor.getString(3));
+                    locationDetail.setTimestamp(cursor.getString(4));
 
 
-            // Adding contact to list
-            locationDataList.add(locationDetail);
-        } while (cursor.moveToNext());
-    }
-}
+                    // Adding contact to list
+                    locationDataList.add(locationDetail);
+                } while (cursor.moveToNext());
+            }
+        }
         // return contact list
         return locationDataList;
+    }
+
+    public void deleteTheLocationDetails()
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_LOCATION_DATA, null, null);
     }
 }
