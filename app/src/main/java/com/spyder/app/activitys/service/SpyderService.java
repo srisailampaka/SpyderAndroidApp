@@ -104,8 +104,8 @@ public class SpyderService extends Service implements SpyderContract.View {
         LocationDetail location = new LocationDetail();
         location.setUserId(sharedPref.getUserId());
        // location.setUserId("1");
-        location.setLattitude("1212");
-        location.setLongitude("1212121");
+        location.setLattitude(getLattitude);
+        location.setLongitude(getLattitude);
         location.setTimestamp(String.valueOf(System.currentTimeMillis()));
         locationDetailList.add(location);
         locationDetails.setLocationDetails(locationDetailList);
