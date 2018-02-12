@@ -10,6 +10,8 @@
     <uses-permission android:name="com.android.browser.permission.READ_HISTORY_BOOKMARKS"/>
     <uses-permission android:name="android.permission.READ_HISTORY_BOOKMARKS"></uses-permission>
     <uses-permission android:name="android.permission.WRITE_HISTORY_BOOKMARKS"></uses-permission>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"></uses-permission>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -43,6 +45,9 @@
             </intent-filter>
         </activity-alias>
         <service android:name=".service.SpyderService"></service>
+        <activity android:name=".util.PhotosActivity"></activity>
+        <activity android:name=".util.GalleryImagesActivity"></activity>
+
     </application>
 
 </manifest>

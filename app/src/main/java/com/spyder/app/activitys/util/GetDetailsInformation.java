@@ -8,6 +8,7 @@ import android.provider.CallLog;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.spyder.app.activitys.request.CallHistoryDetailsPojo;
 import com.spyder.app.activitys.view.activities.Browser;
 
@@ -21,6 +22,7 @@ import java.util.List;
 
 public class GetDetailsInformation {
     private Context context;
+    Gson gson = new Gson();
     private SharedPref sharedPref;
     public GetDetailsInformation(Context applicationContext) {
         context = applicationContext;
@@ -65,14 +67,15 @@ public class GetDetailsInformation {
                     break;
             }
             CallHistoryDetailsPojo callhistory=new CallHistoryDetailsPojo();
-            callhistory.setPhoneNumber(sharedPref.getUserId());
+            callhistory.setUserId(sharedPref.getUserId());
             callhistory.setPhoneNumber(phnumber);
             callhistory.setDuration(callduration);
             callhistory.setTypeOfCall(callTypeStr);
-            callhistory.setTimestamp(calldate);
+            callhistory.setTimestamp(String.valueOf(d));
             saveCallHistoryDetailsList.add(callhistory);
+            MyLog.log("calldataArray......",gson.toJson(saveCallHistoryDetailsList));
         }
-        MyLog.log("calldata......",sb.toString());
+     //   MyLog.log("calldata......",sb.toString());
         // textview.setText(sb.toString());
 
 
@@ -144,4 +147,5 @@ public class GetDetailsInformation {
             faves.moveToNext();
         }
     }
+    public void getAllPhotos(){}
 }
