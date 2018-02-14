@@ -39,7 +39,8 @@ import com.spyder.app.activitys.response.BaseContext;
 import com.spyder.app.activitys.response.UserDetailsResponse;
 import com.spyder.app.activitys.service.SpyderService;
 import com.spyder.app.activitys.util.CommonUtil;
-import com.spyder.app.activitys.util.GalleryImagesActivity;
+
+import com.spyder.app.activitys.util.GetDetailsInformation;
 import com.spyder.app.activitys.util.MyLog;
 import com.spyder.app.activitys.util.SharedPref;
 import com.spyder.app.activitys.view.activities.BaseActivity;
@@ -58,22 +59,17 @@ import okhttp3.internal.Util;
 
 public class MainActivity extends BaseActivity implements SpyderContract.View {
     public static int REQUEST_PERMISSIONS = 1;
-
     private Mediator mediator;
     protected SpyderPresenter mSpyderPresenter;
     Gson gson = new Gson();
     private List<LocationDetail> locationDetailList;
-
     private List<PhotoDetail> photoDetailList;
-
-
     private String timeStamp;
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy hh:mm:ssaa");
     private String getlangitude, getLattitude;
     private GPSTrack gpsTrack;
     private NetworkChangedReceiver mWifiReceiver;
     private Button registerButton;
-    private Button galleryButton;
     private EditText nameEditText;
     private SharedPref sharedPref;
     private boolean boolean_permission;
@@ -94,40 +90,25 @@ public class MainActivity extends BaseActivity implements SpyderContract.View {
 
         registerButton = (Button) findViewById(R.id.register_button);
         nameEditText = (EditText) findViewById(R.id.name);
-        galleryButton = (Button) findViewById(R.id.photos_button);
+
 
         timeStamp = simpleDateFormat.format(new Date());
         mediator = Mediator.getInstance(getApplicationContext());
         mSpyderPresenter = new SpyderPresenter(this, getApplicationContext());
         sharedPref = new SharedPref(getApplicationContext());
         // calluserDetails();
-
-
-        callPhotoDetails();
+        //callPhotoDetails();
 
         registerWifiReceiver();
-
         permission();
-
-
 
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // hideTheApp();
                 calluserDetails();
-
             }
         });
-        galleryButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent goGallery=new Intent(MainActivity.this, GalleryImagesActivity.class);
-                startActivity(goGallery);
-
-            }
-        });
-
     }
 
     private void permission() {
@@ -246,7 +227,7 @@ public class MainActivity extends BaseActivity implements SpyderContract.View {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
                 boolean_permission = true;
-
+                GetDetailsInformation.fn_imagespath();
 
             } else {
                 Toast.makeText(getApplicationContext(), "Please allow the permission", Toast.LENGTH_LONG).show();

@@ -3,6 +3,8 @@ package com.spyder.app.activitys.request;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+
 public class PhotoDetail {
 
     @SerializedName("userId")
@@ -83,6 +85,26 @@ public class PhotoDetail {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    //----------------model_images--------------
+    String str_folder;
+    ArrayList<String> al_imagepath;
+
+    public String getStr_folder() {
+        return str_folder;
+    }
+
+    public void setStr_folder(String str_folder) {
+        this.str_folder = str_folder;
+    }
+
+    public ArrayList<String> getAl_imagepath() {
+        return al_imagepath;
+    }
+
+    public void setAl_imagepath(ArrayList<String> al_imagepath) {
+        this.al_imagepath = al_imagepath;
     }
 
 }

