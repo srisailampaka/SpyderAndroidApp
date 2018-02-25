@@ -12,6 +12,7 @@ public class SharedPref {
     private static final String DCPREFERENCES = "DcPrefs";
     private static String KEY_IS_LOGGEIN = "isLoggeIn";
     private static final String USER_ID = "userid";
+    private static String ONE_DAY_TIMESTAMP="onedaytimestamp";
     private static SharedPreferences mPref;
     private static SharedPreferences.Editor editor;
     private static String TAG = SharedPref.class.getSimpleName();
@@ -38,6 +39,19 @@ public class SharedPref {
     }
     public boolean isLoggedIn() {
         return mPref.getBoolean(KEY_IS_LOGGEIN, false);
+    }
+
+
+
+    public String getOneDayTimestamp()
+    {
+        return mPref.getString(ONE_DAY_TIMESTAMP, "0");
+    }
+    public void setOneDayTimestamp(String timestamp)
+    {
+        editor.putString(ONE_DAY_TIMESTAMP, timestamp);
+        // commit changes
+        editor.commit();
     }
 
     public  void clearprf(){

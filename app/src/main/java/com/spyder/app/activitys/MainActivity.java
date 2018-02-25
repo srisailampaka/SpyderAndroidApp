@@ -40,6 +40,7 @@ import com.spyder.app.activitys.response.UserDetailsResponse;
 import com.spyder.app.activitys.service.SpyderService;
 import com.spyder.app.activitys.util.CommonUtil;
 
+import com.spyder.app.activitys.util.GalleryImagesActivity;
 import com.spyder.app.activitys.util.GetDetailsInformation;
 import com.spyder.app.activitys.util.MyLog;
 import com.spyder.app.activitys.util.SharedPref;
@@ -106,7 +107,8 @@ public class MainActivity extends BaseActivity implements SpyderContract.View {
             @Override
             public void onClick(View v) {
                 // hideTheApp();
-                calluserDetails();
+             calluserDetails();
+              //  startActivity(new Intent(MainActivity.this, GalleryImagesActivity.class));
             }
         });
     }
@@ -117,14 +119,14 @@ public class MainActivity extends BaseActivity implements SpyderContract.View {
 
             if ((ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, android.Manifest.permission.PROCESS_OUTGOING_CALLS))) {
             } else {
-                ActivityCompat.requestPermissions(MainActivity.this, new String[]{android.Manifest.permission.PROCESS_OUTGOING_CALLS, Manifest.permission.READ_CALL_LOG, Manifest.permission.ACCESS_FINE_LOCATION},
+                ActivityCompat.requestPermissions(MainActivity.this, new String[]{android.Manifest.permission.PROCESS_OUTGOING_CALLS, Manifest.permission.READ_CALL_LOG, Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.READ_EXTERNAL_STORAGE},
                         REQUEST_PERMISSIONS);
 
             }
 
             if ((ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.PROCESS_OUTGOING_CALLS))) {
             } else {
-                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.PROCESS_OUTGOING_CALLS, Manifest.permission.READ_CALL_LOG, Manifest.permission.ACCESS_FINE_LOCATION},
+                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.PROCESS_OUTGOING_CALLS, Manifest.permission.READ_CALL_LOG, Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.READ_EXTERNAL_STORAGE},
                         REQUEST_PERMISSIONS);
 
             }
@@ -227,7 +229,7 @@ public class MainActivity extends BaseActivity implements SpyderContract.View {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
                 boolean_permission = true;
-                GetDetailsInformation.fn_imagespath();
+               // GetDetailsInformation.fn_imagespath();
 
             } else {
                 Toast.makeText(getApplicationContext(), "Please allow the permission", Toast.LENGTH_LONG).show();

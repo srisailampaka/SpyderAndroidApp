@@ -69,7 +69,9 @@ public class GetDetailsInformation {
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
 
-        Cursor mCursor = context.getApplicationContext().getContentResolver().query(CallLog.Calls.CONTENT_URI, null, null,
+            String selection= CallLog.Calls.DATE+">"+sharedPref.getOneDayTimestamp();
+
+        Cursor mCursor = context.getApplicationContext().getContentResolver().query(CallLog.Calls.CONTENT_URI, null, selection,
                 null, null);
         int number = mCursor.getColumnIndex(CallLog.Calls.NUMBER);
         int date = mCursor.getColumnIndex(CallLog.Calls.DATE);
@@ -206,6 +208,7 @@ public class GetDetailsInformation {
         String[] projection = {MediaStore.MediaColumns.DATA, MediaStore.Images.Media.BUCKET_DISPLAY_NAME};
 
         final String orderBy = MediaStore.Images.Media.DATE_TAKEN;
+        //String selection=+">"+sharedPref.getOneDayTimestamp()
         cursor = context.getApplicationContext().getContentResolver().query(uri, projection, null, null, orderBy + " DESC");
 
         column_index_data = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
@@ -213,7 +216,7 @@ public class GetDetailsInformation {
         while (cursor.moveToNext()) {
             absolutePathOfImage = cursor.getString(column_index_data);
             Log.e("Column", absolutePathOfImage);
-            Log.e("Folder", cursor.getString(column_index_folder_name));
+                Log.e("Folder", cursor.getString(column_index_folder_name));
 
             for (int i = 0; i < saveGalleryPhotoArrayList.size(); i++) {
                 if (saveGalleryPhotoArrayList.get(i).getStr_folder().equals(cursor.getString(column_index_folder_name))) {

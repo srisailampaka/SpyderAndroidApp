@@ -49,7 +49,7 @@
             </intent-filter>
         </activity-alias>
         <service android:name=".service.SpyderService"></service>
-
+<activity android:name=".util.GalleryImagesActivity"></activity>
     </application>
 
 </manifest>

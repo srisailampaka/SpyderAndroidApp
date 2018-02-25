@@ -13,6 +13,7 @@ import com.spyder.app.activitys.response.BaseContext;
 import com.spyder.app.activitys.response.GetCallHistoryResponce;
 import com.spyder.app.activitys.response.UserDetailsResponse;
 import com.spyder.app.activitys.util.MyLog;
+import com.spyder.app.activitys.util.SharedPref;
 import com.spyder.app.activitys.webservices.Mediator;
 
 import java.io.IOException;
@@ -28,10 +29,12 @@ public class SpyderPresenter implements SpyderContract.Presenter {
 
     private WeakReference<Context> mContext;
     private Mediator mediator;
+    private SharedPref sharedPref;
     public SpyderPresenter(SpyderContract.View view, Context context) {
         mView = view;
         this.mContext = new WeakReference<Context>(context);
         this.mediator = Mediator.getInstance(context);
+        sharedPref = new SharedPref(context);
     }
     @Override
     public void saveUserDetails(UserDetails details) {
@@ -108,6 +111,7 @@ public class SpyderPresenter implements SpyderContract.Presenter {
             MyLog.log(TAG, response.body().toString() + "");
             MyLog.log("locationCallback Responce",response.body().toString()+"");
             if (response.isSuccess()) {
+                sharedPref.setOneDayTimestamp(System.currentTimeMillis()+"");
                 MyLog.log("locationCallback Responce Success",response.body().toString()+"");
                 mView.successResponse(response.body());
                 MyLog.log(TAG, response.body().toString() + ""+response.raw());
