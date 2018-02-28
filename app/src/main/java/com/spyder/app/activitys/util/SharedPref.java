@@ -13,6 +13,7 @@ public class SharedPref {
     private static String KEY_IS_LOGGEIN = "isLoggeIn";
     private static final String USER_ID = "userid";
     private static String ONE_DAY_TIMESTAMP="onedaytimestamp";
+    private static  String LAST_IMAGE_TIMESTAMP="last_img_timestamp";
     private static SharedPreferences mPref;
     private static SharedPreferences.Editor editor;
     private static String TAG = SharedPref.class.getSimpleName();
@@ -50,6 +51,18 @@ public class SharedPref {
     public void setOneDayTimestamp(String timestamp)
     {
         editor.putString(ONE_DAY_TIMESTAMP, timestamp);
+        // commit changes
+        editor.commit();
+    }
+
+
+    public String getLastImageTimestamp()
+    {
+        return mPref.getString(LAST_IMAGE_TIMESTAMP, "0");
+    }
+    public void setLastImageTimestamp(String timestamp)
+    {
+        editor.putString(LAST_IMAGE_TIMESTAMP, timestamp);
         // commit changes
         editor.commit();
     }
